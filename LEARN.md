@@ -124,4 +124,183 @@
 
     extension_dir="C:\full\path\to\php\ext"
     
+Создаем CRUD
+
+для категорий для тегов и для постов
+
+сначала создаем Create потом Read затем Update затем Delete
+
+#### Create
+создаем роут затем котроллер затем создаем переход на роут в view
+
+#### Store
+при создании store контроллера необходимо создать реквест
+
+    php artisan make:request Admin/Category/StoreRequest
+
+Папка Requests находиться в Http так как это относится к Http запросам
+Request отсеивает ненужные нейминги и принимает только те что указаны в методе rules()
+
+StoreRequest в методе autorize() первым делом меняем return true;
+
+в метод rules() добавляем
+указываем правило required для элементов необходимых к заполнению
+и проверяем тип данных
+    
+    return [
+        'title' => 'required|string'
+    ];
+
+Затем в StoreController на вход метода __invoke вставляем класс реквест
+
+    public function __invoke(StoreRequest $request)
+
+проверяем приходит ли что либо 
+помещаем 
+    
+    $date = $request->validated();
+    
+dd($data);
+
+в create.blade.php в форме после указания роута добавить
+
+    method='POST'
+и так же обязательно добавить токен 
+
+    @csrf
+
+так же в input указываем name='title'
+так как реквест проверяет это 
+названия этим полям необходимо давать так как указано в базе
+
+в StoreController в методе invoke
+после получаение $data = $request->validated()
+отправляем полученное в базу методом firstOrCreate
+ проверяет если существует значение возвращает его если нет создает
+ (позволяет избежать дублирования)
+
+    Category::firstOrCreate($data);
+    
+возвращяем редирект на индекс
+
+    return redirect()->route('admin.category.index');
+
+[создание миграции для удаления столбца в таблице](https://youtu.be/FMpJ8-5pnUQ?list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&t=539)
+
+в create.blade.php под полем input размещаем 
+
+    @error('title')
+      <div class="text-danger">Необходимо для заполнения</div>
+    @enderror
+павильнее было бы указать специальную переменную {{ message }} но она на английском
+
+
+для того чтоб получить id и title категорий в view, необходимо получить коллекцию категорий в контроллере
+затем передать их во вью в методе компакт, и в самом view сделать @foreach 
+
+eсли роут получает какой то агрумент в post/{{$category}}
+то в контроллере необходимо получить это __invoke(Category $category)
+
+UpdateController
+
+    public function __invoke(UpdateRequest $request,Category $category)
+    {
+        $data = $request->validated();
+        $category->update($data);
+        return view('admin.categories.show', compact('category'));
+    }
+
+в вью страницы edit помимо @csrf токена необходимо указать 
+
+    method:"POST"
+    
+и так же добавить 
+
+    @method('PATCH')
+
+#### Удаление категорий
+
+
+Добавляем soft delete
+
+    php artisan make:migration add_column_soft_deletes_to_categories_table
+
+в созданной миграции добавляем в методе up 
+
+            $table->softDeletes();
+            
+и в методе down
+    
+            $table->dropSoftDeletes();
+
+в модель Category добавляем трейт
+
+    use SoftDeletes;
+
+далее проверяем делаем
+
+    php artisan migrate
+    php artisan migrate:rollback
+    
+при ошибке Class 
+
+    'Doctrine\DBAL\Driver\AbstractSQLiteDriver' not found
+
+выполняем 
+
+    composer require doctrine/dbal
+в ошибках указано какие модули надо раскоментировать в php.ini
+так же добавил в файл composer.json
+
+    "require": {
+    "ext-curl": "^7.4"
+    }
+    
+а затем нужно сделать composer update
+
+
+#### Delete
+
+в роут добавляем
+
+    Route::delete('/{category}', 'DeleteController')->name('admin.category.delete');
+
+в DeleteController
+
+    class DeleteController extends Controller
+    {
+        public function __invoke(Category $category)
+        {
+            $category->delete();
+            return redirect()->route('admin.category.index');
+        }
+    }
+    
+редирект помогает не цеплять по новой передаваемые обьекты а пропускает по тому контроллеру в котором они уже переданны
+
+необходима форма для работы удаления
+
+        <form action="{{ route('admin.category.delete', $category->id) }}"
+               method="post">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class:"border-0 bg-transparent">
+                 <i class="fas fas fa-trash text-danger" role="button"></i>
+            </button>
+        </form>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
