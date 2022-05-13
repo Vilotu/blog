@@ -290,6 +290,57 @@ UpdateController
         </form>
     
 
+Crud для тегов
+копируем и редактируем нейпспейсы и переменные
+роуты, контроллеры, вью, и реквесты
+
+Добавляем софт делит в таблицу теги
+
+    php artisan make:migration add_soft_delete_to_tags_table
+
+в модель добавляем 
+
+    use SoftDeletes;
+
+Для того чтоб при сообщении о незаполненном поле
+не сбрасывались введенные данные используем хелпер
+{{ old('title') }}
+в imput вставляем в value="
+а в textarea между ><
+
+
+
+[Отображение имени выбраного к загрузке изображения](https://youtu.be/oCwP0PsHmUk?list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&t=131)
+
+для того чтоб форма могла принимать изображение 
+необходимо добавить 
+
+    enctype="multipart/form-data"
+
+Хранение изображений
+из получаемого из формы обьекта достаем сгенерированное название файла
+и с помощью класса 
+    
+    Storage::put('/images/, $previewImage)
+сохраняем файл по указанному пути storage/images/some.jpg
+
+        $data['preview_image'] = Storage::put('/images', $data['preview_image']);;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
