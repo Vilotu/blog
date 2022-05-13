@@ -290,9 +290,17 @@ UpdateController
         </form>
     
 
+Crud для тегов
+копируем и редактируем нейпспейсы и переменные
+роуты, контроллеры, вью, и реквесты
 
+Добавляем софт делит в таблицу теги
 
+    php artisan make:migration add_soft_delete_to_tags_table
 
+в модель добавляем 
+
+    use SoftDeletes;
 
 
 
