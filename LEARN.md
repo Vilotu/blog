@@ -326,16 +326,63 @@ Crud для тегов
 
         $data['preview_image'] = Storage::put('/images', $data['preview_image']);;
 
+Проверка на существование в реквестах
+
+                                если существует в таблице категории,id
+            'category_id' => 'required|exists:categories,id'
+
+для того чтобы подставить нужную (категорию) в список 
+добавляем условие в теле тега сравнивая с помощью хелпера old()
+
+                    <option
+                        {{ old('category_id') ==  $category->id ? ' selected' : '' }}
+                        value="{{ $category->id }}">{{ $category->title }}
+                    </option>
 
 
 
+многие ко многим
+для того чтоб при редактировании постов теги попадали в свою отдельную таблицу
+добавляем в модели Post метод tags()
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tag_id');
+    }
 
+В StoreController получаем теги запроса
 
+        $tagIds = $data['tag_ids'];
+затем удаляем их из даты
 
+        unset($data['tag_ids']);
+помещаем экземпляр класса пост в переменную
+и вызываем метод тегс
 
+        $post = Post::firstOrCreate($data);
+        $post->tags()->attach($tagIds);
 
+Добавляем транзакцию
+заворачиваем содержимое метода инвок в трайкеч
 
+        try {
+            $data = $request->validated();
+            $tagIds = $data['tag_ids'];
+            unset($data['tag_ids']);
+
+            $data['preview_image'] = Storage::put('/images', $data['preview_image']);
+            $data['main_image'] = Storage::put('/images', $data['main_image']);
+
+            $post = Post::firstOrCreate($data);
+            $post->tags()->attach($tagIds);
+        } catch (\Exception $exception) {
+            abort(404);
+        }
+Для того чтоб выбранные теги не сбрасывались 
+проверяем что выбранные теги являются массивом
+и сверяем в массиве получаемые теги с выбранныии???о
+
+    <option {{ is_array(old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : '' }} value="{{ $tag->id }}">{{ $tag->title }}</option>
 
 
 
