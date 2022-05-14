@@ -33,7 +33,7 @@
                                    value="{{ old('title') }}"
                             >
                             @error('title')
-                            <div class="text-danger">Не может быть пустым</div>
+                            <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -41,7 +41,7 @@
                                 {{ old('content') }}
                             </textarea>
                             @error('content')
-                            <div class="text-danger">Не может быть пустым</div>
+                            <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             @error('preview_image')
-                            <div class="text-danger">Не может быть пустым</div>
+                            <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -71,7 +71,7 @@
                                 </div>
                             </div>
                             @error('main_image')
-                            <div class="text-danger">Не может быть пустым</div>
+                            <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -84,6 +84,9 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @error('category_id')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label>Тэги</label>
@@ -91,9 +94,14 @@
                                     data-placeholder="Выберите теги" style="width: 100%;">
                                 @foreach($tags as $tag)
                                     <option
-                                        {{ is_array(old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : '' }} value="{{ $tag->id }}">{{ $tag->title }}</option>
+                                        {{ is_array(old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : '' }}
+                                        value="{{ $tag->id }}">{{ $tag->title }}
+                                    </option>
                                 @endforeach
                             </select>
+                            @error('tag_ids')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Добавить">

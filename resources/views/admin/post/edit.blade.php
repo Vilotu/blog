@@ -35,7 +35,7 @@
                                        value="{{ $post->title }}"
                                 >
                                 @error('title')
-                                <div class="text-danger">Не может быть пустым</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
@@ -43,7 +43,7 @@
                                 {{ $post->content }}
                             </textarea>
                                 @error('content')
-                                <div class="text-danger">Не может быть пустым</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                                 @error('preview_image')
-                                <div class="text-danger">Не может быть пустым</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                                 @error('main_image')
-                                <div class="text-danger">Не может быть пустым</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
@@ -92,6 +92,9 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('category_id')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label>Тэги</label>
@@ -103,6 +106,9 @@
                                             value="{{ $tag->id }}">{{ $tag->title }}</option>
                                     @endforeach
                                 </select>
+                                @error('tag_ids')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <input type="submit" class="btn btn-primary" value="Обновить">
