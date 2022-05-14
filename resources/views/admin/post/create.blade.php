@@ -23,7 +23,7 @@
 
         <!-- Main content -->
         <section class="content">
-            <div class="container-fluid w-100">
+            <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
                     <form action="{{ route('admin.post.store') }}" method="POST" enctype="multipart/form-data">
@@ -95,7 +95,6 @@
                                 @endforeach
                             </select>
                         </div>
-
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Добавить">
                         </div>
