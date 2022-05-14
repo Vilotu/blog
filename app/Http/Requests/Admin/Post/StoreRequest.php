@@ -33,4 +33,22 @@ class StoreRequest extends FormRequest
             'tag_ids.*' => 'nullable|integer|exists:tags,id',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'Это поле необходимо заполнить',
+            'title.string' => 'Данные должны быть строкой',
+            'content.required' => 'Это поле необходимо заполнить',
+            'content.string' => 'Данные должны быть строкой',
+            'preview_image.required' => 'Это поле необходимо заполнить',
+            'preview_image.file' => 'Необходимо выбрать файл',
+            'main_image.required' => 'Это поле необходимо заполнить',
+            'main_image.file' => 'Необходимо выбрать файл',
+            'category_id' => 'Это поле необходимо заполнить',
+            'category_id' => 'Id категории должен быть числом',
+            'category_id' => 'Id категории должен существовать в базе данных',
+            'tag_ids.array' => 'Необходимо отправить массив данных',
+        ];
+    }
 }
