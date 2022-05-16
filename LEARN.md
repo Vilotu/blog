@@ -445,3 +445,19 @@ crud для User
     так как email указан в таблице как uniq
 
 В едит блейд копируем нужные поля и не забываем добавлять value="
+
+После добавления нового middleware 
+
+    make:middleware AdminMiddleware
+    
+необходимо его зарегистрировать
+в классе Kernel 
+помещаем в массив routeMiddleware
+
+        'admin' => AdminMiddleware::class,
+
+далее идем в роуты и добавляем как префикс
+мидлвейр запускаются в указаном порядке, сначала auth затем admin
+    
+    'middleware' => ['auth','admin']
+    
