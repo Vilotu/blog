@@ -461,3 +461,17 @@ crud для User
     
     'middleware' => ['auth','admin']
     
+создаем мейл и дополнительно блейд шаблон
+
+    php artisan make:mail User/PasswordMail -m mail.user.password
+[Отправка писем](https://youtu.be/njFqr4Si6H4?list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB)
+
+плюс следующий видос
+
+#### Очеред
+
+queue - кью
+
+    php artisan queue:table
+    
+[Очереди](https://youtu.be/kEa4ezXri4E?list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB)
