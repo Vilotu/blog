@@ -475,3 +475,71 @@ queue - кью
     php artisan queue:table
     
 [Очереди](https://youtu.be/kEa4ezXri4E?list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB)
+
+создаем Notification
+
+    php artisan make:notification SendVerifyWithQueueNotification
+    
+в созданный класс добавляем имплементацию
+
+    implements ShouldQueue
+
+и изменяем наследованрие на 
+
+    extends VerifyEmail
+    
+далее идем в модель User, так как мы указали имплементацию
+
+    implements MustVerifyEmail 
+
+то мы должны переписать реализацию метода 
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new SendVerifyWithQueueNotification());
+    }
+
+далее в файлу .env изменить 
+
+    QUEUE_CONNECTION=database
+
+далее в классе PasswordMail добавляем 
+
+    implements ShouldQueue
+
+
+для запуска очереди
+
+    php artisan queue:work
+    
+на реальном сервере будет вместо этого какой то супервизор
+
+
+#### создаем класс Job для добавления в очередь создания юзера
+
+    php artisan make:job StoreUserJob
+
+переносим реализацию из стор контролеера в job в метод handle
+далее пробрасываем в контроллер переменную $data и инициализируем ее 
+затем в реализации заменяем $data на $this->data
+
+далее в стор контроллере вызываем dispatch у класса job и передаем в него дату
+
+        StoreUserJob::dispatch($data);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

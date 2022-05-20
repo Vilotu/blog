@@ -10,5 +10,4 @@ class SendVerifyWithQueueNotification extends VerifyEmail implements ShouldQueue
 {
     use Queueable;
 
-
 }
