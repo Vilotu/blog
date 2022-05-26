@@ -528,6 +528,9 @@ queue - кью
         StoreUserJob::dispatch($data);
 
 
+Создаем фабрику для постов
+
+    php artisan make:factory PostFactory -m Post
 
 
 
